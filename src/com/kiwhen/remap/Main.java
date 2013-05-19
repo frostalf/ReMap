@@ -90,7 +90,7 @@ public class Main extends JavaPlugin implements Listener {
 
 			for(Entry<String, Object> e : raw.entrySet()) {
 				String v = e.getValue().toString();
-				remaps.put(e.getKey(), v);
+				remaps.put(e.getKey().replaceAll("%P", "."), v);
 			}
 
 			cs = yaml.getConfigurationSection("swap");
@@ -100,7 +100,7 @@ public class Main extends JavaPlugin implements Listener {
 
 			for(Entry<String, Object> e : raw.entrySet()) {
 				String v = e.getValue().toString();
-				swap.put(e.getKey(), v);
+				swap.put(e.getKey().replaceAll("%P", "."), v);
 			}
 		}
 	}
