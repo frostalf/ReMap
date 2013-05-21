@@ -1,6 +1,7 @@
 package com.kiwhen.remap;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -15,7 +16,7 @@ public class Main extends JavaPlugin implements Listener {
 	private Loader loader = null;
 
 	private Map<String, String> remaps = new HashMap<String, String>();
-	private Map<String, String> swaps = new HashMap<String, String>();
+	private Map<String, String> swaps = new LinkedHashMap<String, String>();
 	
 	private boolean blockCmds = false;
 	private String blockMsg = "";
