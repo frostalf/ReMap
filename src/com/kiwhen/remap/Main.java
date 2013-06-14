@@ -1,10 +1,8 @@
 package com.kiwhen.remap;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,85 +10,110 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 public class Main extends JavaPlugin implements Listener {
+	// Objects
 	private ProtocolManager pm = null;
-	private Loader loader = null;
-
-	private Map<String, String> remaps = new HashMap<String, String>();
-	private Map<String, String> swaps = new LinkedHashMap<String, String>();
+	private Loader loader = new Loader(this);
+	private Mapper mapper = new Mapper();
 	
-	private boolean blockCmds = false;
+	// Settings from config.yml
+	private boolean blockCommands = false;
 	private String blockMsg = "";
 
-	public void onLoad() {
-		pm = ProtocolLibrary.getProtocolManager();
-		loader = new Loader(this);
-	}
-
+	// Initialize
 	public void onEnable() {
+		// Create data folder and config.yml if there isn't one
 		saveDefaultConfig();
 		
-		loader.remaps();
-		loader.config();
+		// Start reading config and remap files
+		getLoader().config();
+		getLoader().readAll();
 
+		// Load up ProtocolLib and add listener
+		pm = ProtocolLibrary.getProtocolManager();
+		pm.addPacketListener(new ChatListener(this).get());
+		
+		// Add command listeners
 		getServer().getPluginManager().registerEvents(new CmdListener(this), this);
-		pm.addPacketListener(new PacketListener(this).get());
 		getCommand("remap").setExecutor(new CmdExecutor(this));
 		
+		// Log status
 		getLogger().log(Level.INFO, status());
 	}
 	
+	// Current plugin status
 	public String status() {
 		String output = "";
-		int size = remaps.size();
-		if(size == 0) {
-			output += "No remaps loaded and ";
-		} else if(size == 1) {
-			output += "1 remap loaded and ";
-		} else {
-			output += size + " remaps loaded and ";
-		}
-		size = swaps.size();
-		if(size == 0)
-			output += "no sentences swapped. ";
-		else if(size == 1)
-			output += "1 sentence swapped. ";
+		
+		// Remaps
+		int size = getMapper().getRemapCount();
+		if(size == 1)
+			output += "1 remapped command, ";
 		else
-			output += size + " sentences swapped. ";
-		if(getBlockCmds())
-			output += "Blocking non-remapped commands.";
+			output += size + " remapped commands, ";
+		
+		// Swaps
+		size = getMapper().getSwapCount();
+		if(size == 1)
+			output += "1 sentence swapped, ";
 		else
-			output += "Not blocking non-remapped commands.";
+			output += size + " sentences swapped, ";
+		
+		// Bleeps
+		size = getMapper().getBleepCount();
+		if(size == 1)
+			output += "1 phrase bleeped and ";
+		else
+			output += size + " phrases bleeped and ";
+		
+		// Replies
+		size = getMapper().getReplyCount();
+		if(size == 1)
+			output += "1 reply loaded. ";
+		else
+			output += size + " replies loaded. ";
+		
+		// Blocking
+		if(isBlocking())
+			output += "Blocking all non-remapped commands. ";
+		else
+			output += "Not blocking any commands. ";
+		
 		return output;
 	}
 	
+	// Getters and setters
 	public Loader getLoader() {
-		return loader;
+		return this.loader;
 	}
-	public Map<String, String> getRemaps() {
-		return remaps;
+	public Mapper getMapper() {
+		return this.mapper;
 	}
-	public Map<String, String> getSwaps() {
-		return swaps;
+	public boolean isBlocking() {
+		return this.blockCommands;
 	}
-	public boolean getBlockCmds() {
-		return blockCmds;
-	}
-	public void setBlockCmds(boolean block) {
-		blockCmds = block;
+	public boolean setBlocking(boolean block) {
+		if(this.blockCommands != block) {
+			this.blockCommands = block;
+			return true; // Status changed
+		}
+		return false; // Status remains the same
 	}
 	public boolean toggleBlockCmds() {
-		if(blockCmds)
-			blockCmds = false;
+		if(isBlocking())
+			setBlocking(false);
 		else
-			blockCmds = true;
-		getConfig().set("blockCommands", blockCmds);
+			setBlocking(true);
+		
+		getConfig().set("blockCommands", isBlocking());
 		saveConfig();
-		return blockCmds;
+		return isBlocking();
 	}
 	public String getBlockMsg() {
-		return blockMsg;
+		return this.blockMsg;
 	}
 	public void setBlockMsg(String text) {
-		blockMsg = text;
+		this.blockMsg = ChatColor.translateAlternateColorCodes('&', text.replaceAll("\\\\n", "\n"));
+		getConfig().set("blockMessage", this.blockMsg);
+		saveConfig();
 	}
 }
