@@ -40,8 +40,18 @@ public class CmdListener implements Listener {
 		
 		
 		// Strip all forward slashes up front
-		while(command.substring(0, 1).equalsIgnoreCase("/"))
-			command = command.substring(1, command.length());
+		command = command.replaceAll("^/+", "");
+		
+		if(command.trim().equalsIgnoreCase("")) {
+			// Empty command
+			if(plugin.isBlocking()) {
+				if(!plugin.getBlockMsg().trim().equalsIgnoreCase("")) {
+					p.sendMessage(plugin.getBlockMsg());
+				}
+				e.setCancelled(true);
+			}
+			return;
+		}
 		
 		boolean remapping = false;
 		boolean replying = false;

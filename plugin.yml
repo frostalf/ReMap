@@ -1,6 +1,6 @@
 name: ReMap
 main: com.kiwhen.remap.Main
-version: 0.3
+version: 0.3.2
 author: kiwhen
 website: http://www.kiwhen.com
 depend: [ProtocolLib]
