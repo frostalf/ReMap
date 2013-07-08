@@ -4,7 +4,7 @@
 
   <groupId>net.frostalf.dev</groupId>
   <artifactId>ReMap</artifactId>
-  <version>0.3.2-SNAPSHOT</version>
+  <version>0.3.3</version>
   <packaging>jar</packaging>
 
   <name>ReMap</name>
@@ -26,6 +26,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+<repositories>
+  <repository>
+    <id>comphenix-rep</id>
+    <name>Comphenix Repository</name>
+    <url>http://repo.comphenix.net/content/groups/public</url>
+  </repository>
+<!-- And so on -->
+</repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -36,7 +44,7 @@
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
-      <version>2.4.7-SNAPSHOT</version>
+      <version>2.4.7</version>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
