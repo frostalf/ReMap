@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <name>ReMap</name>
-  <url>http://maven.apache.org</url>
+  <url>http://http://dev.bukkit.org/bukkit-plugins/remap/</url>
     <build>
         <resources>
             <resource>
