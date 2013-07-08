@@ -6,4 +6,5 @@ website: http://www.kiwhen.com
 depend: [ProtocolLib]
 commands:
   remap:
+    description: Various functions. Type "/remap" for overview.
     usage: Type "/remap" to see a list of commands.
