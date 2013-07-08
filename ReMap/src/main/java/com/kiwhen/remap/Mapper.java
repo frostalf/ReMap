@@ -1,5 +1,6 @@
 package com.kiwhen.remap;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class Mapper {
 	
 	// Remaps
 	public Map<String, Set<String>> getAllRemapPatterns() {
-		return this.remapPatterns;
+		return Collections.unmodifiableMap(this.remapPatterns);
 	}
 	public Set<String> getRemapPatterns(String commandname) {
 		return this.remapPatterns.get(commandname);
@@ -35,7 +36,7 @@ public class Mapper {
 	
 	// Swaps
 	public Map<String, String> getSwaps() {
-		return this.swaps;
+		return Collections.unmodifiableMap(this.swaps);
 	}
 	public String getSwap(String pattern) {
 		return this.swaps.get(pattern);
@@ -46,7 +47,7 @@ public class Mapper {
 	
 	// Bleeps
 	public Map<String, String> getBleeps() {
-		return this.bleeps;
+		return Collections.unmodifiableMap(this.bleeps);
 	}
 	public String getBleep(String word) {
 		return this.bleeps.get(word);

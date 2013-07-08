@@ -1,5 +1,6 @@
 package com.kiwhen.remap;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class MatchResult {
 		return this.pattern;
 	}
 	public Map<String, String> getWildcards() {
-		return this.wildcards;
+		return Collections.unmodifiableMap(this.wildcards);
 	}
 	public String getAsterisk() {
 		return this.asterisk;
